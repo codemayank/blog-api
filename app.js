@@ -17,14 +17,14 @@ let blogSchema = new mongoose.Schema({
 let Blog = mongoose.model("Blog", blogSchema);
 
 //CRUD Routes
-//Default Route redirects to /blogs
+//Default Route -- redirects to /blogs
 app.get("/", function(req, res){
   res.redirect("/blogs");
 });
 
-//Index Routes -- Get All Blogs
+//Index Route -- API to Get All Blogs
 app.get("/blogs", function(req, res){
-  Blog.find({}, function(err, blog){
+  Blog.find({}, (err, blog) => {
     if(err){
       console.log(err);
     }else{
@@ -33,13 +33,13 @@ app.get("/blogs", function(req, res){
   });
 });
 
-//New Route - Create a new Blog
+//New Route - API to Create a new Blog
 app.post("/blogs", function(req, res){
   let title = req.body.title;
   let author = req.body.author;
   let body = req.body.body;
   let newBlog = {title : title, author : author, body : body};
-  Blog.create(newBlog, function(err, newlyCreated){
+  Blog.create(newBlog,(err, newlyCreated) => {
     if(err){
       res.send("there has been an error");
     }else{
@@ -48,9 +48,9 @@ app.post("/blogs", function(req, res){
   });
 });
 
-//Show Blog Route -- API to get a particular Blogs
+//Show Blog Route -- API to get a particular Blog
 app.get("/blogs/:id", function(req, res){
-  Blog.findById(req.params.id, function(err, blog){
+  Blog.findById(req.params.id, (err, blog) => {
     if(err || !blog){
       res.send("there has been an error");
     }else{
@@ -59,13 +59,13 @@ app.get("/blogs/:id", function(req, res){
   });
 });
 
-//Edit / update Route -- API to edit a particular Blog
+//Edit update Route -- API to edit a particular Blog
 app.put("/blogs/:id", function(req, res){
   let title = req.body.title;
   let author = req.body.author;
   let body = req.body.body;
   let updatedBlog = {title : title, author : author, body : body};
-  Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new : true}, function(err, updatedBlog){
+  Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new : true}, (err, updatedBlog) => {
     if(err || !updatedBlog){
       res.send("There has been an error");
     }else{
@@ -74,10 +74,10 @@ app.put("/blogs/:id", function(req, res){
   })
 });
 
-//Delete Route //API to delete a route
+//Delete Route -- API to delete a particular blog
 app.delete("/blogs/:id", function(req, res){
   //destroy Blogs
-  Blog.findByIdAndRemove(req.params.id, function(err){
+  Blog.findByIdAndRemove(req.params.id, (err) => {
     if(err){
       res.send("There has been an error");
     }else{
